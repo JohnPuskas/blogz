@@ -1,18 +1,21 @@
 <!doctype html>
 <html>
     <head>
-        <nav>
-            <a href="/blog/">Main Blog Page</a>
-            <a href="/newpost/">Add a Blog Entry</a>
-        </nav>>
-        <title>{{title}}</title>
-    {% head content %}
-    {% endblock %}
+        
+        {% block head %}
+
+        {% endblock %}
     
     </head>
     <body>
-    
-    {% body content %}
-    {% endblock %}
-    </body>]
+        <nav>
+            <a href="/blog">Main Blog Page</a>
+            <a href="/newpost">Add a Blog Entry</a>
+        </nav>
+        
+        {% block body %}
+
+        {% endblock %}
+
+    </body>
 </html>
