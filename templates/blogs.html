@@ -1,0 +1,18 @@
+{%  extends "base.html" %}
+
+{% head content %}
+
+
+
+{% endblock %}
+
+{% block content %}
+<!-- possibly loop to make entries AS A TABLE -->
+    <table>
+        {% for entry in entries %}
+            <tr><font size="2em">entry.title</font></tr>
+            <tr>entry.body</tr>
+            <hr>
+        {% endfor %}
+    </table>
+{% endblock %}
