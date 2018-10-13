@@ -21,13 +21,22 @@ class Blog(db.Model):
 
 @app.route('/blog', methods=['POST', 'GET'])
 def index():
-   
-    blogs = Blog.query.all()
-
-    return render_template('/blogs.html', blogs=blogs)
-
     
+    blog_id = request.args.get('id')
+
+    if blog_id == None:
+        blogs = Blog.query.all()
+
+        return render_template('/blogs.html', blogs=blogs)
+        
+    else:
+        blog_id_int= int(blog_id)
+        blog = Blog.query.get(blog_id_int)
+
+        return render_template('/blogdisplay.html',
+            blog=blog)    
     
+
 @app.route('/newpost')
 def display_add_blog():
    
@@ -62,7 +71,10 @@ def add_blog():
         db.session.add(new_blog)
         db.session.commit()      
         
-        return redirect('/blog')
+        new_blog_id = new_blog.id
+
+        return redirect("/blog?id={0}".format(new_blog_id))
+
 
 
 if __name__ == '__main__':

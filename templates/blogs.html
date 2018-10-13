@@ -12,7 +12,7 @@
     
     <table>
         {% for blog in blogs %}
-            <p><font size="6em">{{blog.title}}</font></p>
+            <a href="/blog?id={{blog.id}}" > <p><font size="6em">{{blog.title}}</font></p></a>
             <p><font size="3em">{{blog.body}}</font></p>
             <hr />
         {% endfor %}
