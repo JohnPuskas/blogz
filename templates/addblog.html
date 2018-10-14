@@ -6,6 +6,7 @@
 
     <style>
         .error {
+            font-style: italic;
             color: red;
             margin-top: 0%;
             margin-bottom: 0%;
@@ -19,12 +20,12 @@
     <form method='POST'>
         <label>
             Title for your new blog:
-            <input type='text' name='title' value='{{title}}' size='32'/>
+            <input type='text' name='title' value='{{title}}' size='51'/>
         </label>
             <p class="error">{{title_error}}</P>
         <label>
             Your new blog:
-            <textarea name='body' value='{{body}}' rows="4" cols="64"></textarea>
+            <textarea name='body' value='{{body}}' rows="5" cols="51"></textarea>
         </label>
             <p class="error">{{body_error}}</P>
             <button type="submit">Add Entry</button>
