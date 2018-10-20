@@ -32,6 +32,81 @@ class User(db.Model):
         self.username = password
 
 
+@app.route("/signup")
+def display_signup():
+    return render_template('signup.html')
+
+
+@app.route("/signup", methods=['POST'])
+def validate():
+    username = request.form['username']
+    password = request.form['password']
+    re_enter = request.form['re-enter']
+
+    username_error = ''
+    password_error = ''
+    password_mismatch = ''
+    empty_field_error = ''
+    duplicate_username_error = ''
+
+    if username == '' or password == '' or re_enter == '':
+        empty_field_error = "One or more fields are invalid"
+        password = ''
+        re_enter = ''
+
+    elif len(password) < 3:
+        password_error = 'Password must be greater than 3 characters'
+        password = ''
+        re_enter = ''
+
+    elif password != re_enter:
+        password_mismatch = "Passwords don't match"
+        password = ''
+        re_enter = ''   
+
+    elif len(username) < 3:
+        username_error = "Username must be greater than 3 characters"
+        username = ''
+        password = ''
+        re_enter = ''
+
+    existing_user = User.query.filter_by(username=username).first()
+    
+    # TODO - check to make sure following if statement works!
+    
+    if existing_user == True:
+        duplicate_username_error = 'Username already exists'
+        username = ''
+        password = ''
+        re_enter = ''
+
+
+    if (not username_error and 
+        not password_error and
+        not password_mismatch and
+        not empty_field_error and
+        not duplicate_username_error
+        ):
+
+        new_user = User(username, password)
+        db.session.add(new_user)
+        db.session.commit()
+        session['username'] = username
+        return redirect('/newpost')
+
+    else:
+        return render_template(
+            'signup.html',
+            username_error=username_error,
+            password_error=password_error, 
+            mismatch_error=password_mismatch,
+            empty_field_error=empty_field_error,
+            duplicate_username_error=duplicate_username_error,
+            username=username, 
+            password=password,
+            password_match=re_enter
+            )        
+
 
 @app.route('/blog', methods=['POST', 'GET'])
 def index():

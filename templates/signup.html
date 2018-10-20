@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block head %}
+  
+    <title>Signup</title>
+
+{% endblock %}
+
+
+{% block body %}
+    
+    <h1>Signup</h1>
+    <form method='POST'>
+        <table>
+            <tr>
+                <label>
+                    <td>Username</td>
+                    <td><input name='username' type="text" value='{{username}}'  /></td>
+                </label>
+                    <td><p class="error">{{username_error}}</p></tr>
+            </tr>
+            <tr>
+                <label>
+                    <td>Password</td>
+                    <td><input name="password"  type="password" value='{{password}}' /></td>
+                </label>
+                    <td><p class="error">{{password_error}}</p></td>
+            </tr>
+            <tr>
+                <label>
+                    <td>Verify Password</td>
+                    <td><input name="re-enter" type="password" value='{{password_match}}' /></td>
+                </label>
+                    <td><p class="error">{{mismatch_error}}</p></td>
+            </tr>
+            <tr>
+                    <td><button type="submit">Sign Up!</button></td>
+            </tr>
+            
+                    <p class='error'>{{empty_field_error}}</p>
+
+                    <p class='error'>{{duplicate_username_error}}</p>
+           
+        </table>
+    </form>
+
+{% endblock %}

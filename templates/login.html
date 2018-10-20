@@ -1,0 +1,39 @@
+{%  extends "base.html" %}
+
+{% block head %}
+
+    <title>Log In!</title>
+
+{% endblock %}
+
+{% block body %}
+    <h1>Log In</h1>
+    <form method="POST">
+        <table>
+            <tr>
+                <label>
+                    <td>Enter Username</td>
+                    <td><input name='username' type='text' value='{{username}}' /></td>
+                </label>
+                    <td><p class='error'>{{incorrect_username))</p></td>
+            </tr>
+            <tr>
+                <label>
+                    <td>Password</td>
+                    <td><input name="password"  type="password" value='{{password}}' /></td>
+                </label>
+                    <td><p class="error">{{incorrect_password}}</p></td>
+            </tr>
+            <tr>
+                <td><button type="submit">Log In</button></td>
+            </tr>
+            <tr>
+                <p>Don't have an account? <a href="/signup">Create One!</a></p>
+            </tr>
+        </table>
+    </form>
+
+
+
+{% endblock %}
+
