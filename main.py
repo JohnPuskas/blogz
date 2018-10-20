@@ -4,7 +4,7 @@ import pymysql
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://build-a-blog:blogger@localhost:8889/build-a-blog'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:12345@localhost:8889/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 
@@ -13,10 +13,24 @@ class Blog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50))
     body = db.Column(db.String(255))
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    def __init__(self, title, body):
+    def __init__(self, title, body, owner):
         self.title = title
         self.body = body
+        self.owner = owner
+
+class User(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(24), unique=True)
+    password = db.Column(db.String(32))
+    blogs = db.relationship('Blog', backref='owner')
+
+    def __init__(self, username, password):
+        self.username = username
+        self.username = password
+
 
 
 @app.route('/blog', methods=['POST', 'GET'])
@@ -46,6 +60,8 @@ def display_add_blog():
 @app.route('/newpost', methods=['POST'])
 def add_blog():
 
+    owner = User.query.filter_by(username=session['username']).first()
+
     title = request.form['title']
     body = request.form['body']
     title_error = ''
@@ -67,7 +83,7 @@ def add_blog():
             body = body)
 
     else:
-        new_blog = Blog(title, body)
+        new_blog = Blog(title, body, owner)
         db.session.add(new_blog)
         db.session.commit()      
         
