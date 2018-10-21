@@ -33,14 +33,14 @@ class User(db.Model):
         self.username = username
         self.username = password
 
-
-# @app.route("/signup")
-# def display_signup():
-#     return render_template('signup.html')
-
+@app.before_request
+def require_login():
+    allowed_routes = ['login', 'index', 'signup', 'blog']
+    if request.endpoint not in allowed_routes and 'username' not in session:
+        return redirect('/login')
 
 @app.route("/signup", methods=['POST', 'GET'])
-def signup_validate():
+def signup():
     if request.method == 'POST':
 
         username = request.form['username']
@@ -78,25 +78,29 @@ def signup_validate():
         
         ######## TODO - check to make sure following if statement works!
 
-        if existing_user:
-            duplicate_username_error = 'Username already exists'
-            username = ''
-            password = ''
-            re_enter = ''
+        # if existing_user == True:
+        #     duplicate_username_error = 'Username already exists'
+        #     username = ''
+        #     password = ''
+        #     re_enter = ''
 
 
         if (not username_error and 
             not password_error and
             not password_mismatch and
-            not empty_field_error and
-            not duplicate_username_error
+            not empty_field_error
             ):
+            
+            if not existing_user:
+                new_user = User(username, password)
+                db.session.add(new_user)
+                db.session.commit()
+                session['username'] = username
+                return redirect('/newpost')
 
-            new_user = User(username, password)
-            db.session.add(new_user)
-            db.session.commit()
-            session['username'] = username
-            return redirect('/newpost')
+            else:
+                flash('Username already exists')
+
 
         else:
             return render_template(
@@ -105,7 +109,6 @@ def signup_validate():
                 password_error=password_error, 
                 mismatch_error=password_mismatch,
                 empty_field_error=empty_field_error,
-                duplicate_username_error=duplicate_username_error,
                 username=username, 
                 password=password,
                 password_match=re_enter
@@ -114,7 +117,7 @@ def signup_validate():
     return render_template('signup.html')   
 
 @app.route('/login', methods=['POST', 'GET'])
-def login_validate():
+def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password'] 
@@ -134,8 +137,14 @@ def login_validate():
 
     return render_template('login.html')
 
+@app.route('/logout')
+def logout():
+    del session['username']
+    return redirect('/blog')
+
+
 @app.route('/blog', methods=['POST', 'GET'])
-def index():
+def blog():
     
     blog_id = request.args.get('id')
 

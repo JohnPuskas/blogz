@@ -14,12 +14,19 @@
                 margin-top: 0%;
                 margin-bottom: 0%;
             }
+            .nav-right {
+                float: right;
+                margin-right: 3%;
+            }
         </style>
     </head>
     <body>
         <nav>
-            <a href="/blog">Main Blog Page</a>
-            <a href="/newpost">Add a Blog Entry</a>
+            <a href="/">Home</a>
+            <a href="/blog">All Posts</a>
+            <a href="/newpost">New Post</a>
+            <a class="nav-right" href="/logout">Logout</a>
+            <a class="nav-right" href="/login">Login</a>
         </nav>
         
         {% with messages = get_flashed_messages(with_categories=True) %}
