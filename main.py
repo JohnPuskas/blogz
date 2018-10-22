@@ -141,16 +141,23 @@ def logout():
     return redirect('/blog')
 
 
-@app.route('/blog', methods=['POST', 'GET'])
+@app.route('/blog')
 def blog():
     
     blog_id = request.args.get('id')
+    user_id = request.args.get('user')
 
-    if blog_id == None:
+    if blog_id == None and user_id == None:
         blogs = Blog.query.all()
 
         return render_template('/blogs.html', blogs=blogs)
         
+    elif blog_id == None:
+        user_id_int = int(user_id)
+        
+        users_blogs = Blog.query.filter_by(owner_id=user_id_int).all()
+        return render_template('/user-blogs.html', blogs=users_blogs)
+
     else:
         blog_id_int= int(blog_id)
         blog = Blog.query.get(blog_id_int)
@@ -168,7 +175,7 @@ def display_add_blog():
 @app.route('/newpost', methods=['POST'])
 def add_blog():
 
-    owner = User.query.filter_by(username=session['username']).first()
+    # owner = User.query.filter_by(username=session['username']).first()
 
     title = request.form['title']
     body = request.form['body']
@@ -198,6 +205,13 @@ def add_blog():
         new_blog_id = new_blog.id
 
         return redirect("/blog?id={0}".format(new_blog_id))
+
+@app.route('/')
+def index():
+
+    users = User.query.all()
+
+    return render_template('index.html', users=users)
 
 
 

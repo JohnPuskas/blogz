@@ -2,12 +2,12 @@
 
 {% block head %}
 
-    <title>Blogz</title>
+    <title>Blog Posts!</title>
 
 {% endblock %}
 
 {% block body %}
-    <h1>Blogs</h1>    
+    <h1>Blog Posts</h1>    
         {% for blog in blogs %}
             <a href="/blog?id={{blog.id}}" > <p><font size="6em">{{blog.title}}</font></p></a>
             <p><font size="3em">{{blog.body}}</font></p>
